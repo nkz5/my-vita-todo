@@ -1,4 +1,5 @@
 <script setup>
+/*インプットされたタスクをhtmlのlocalstorageに保存する*/
 import { ref } from 'vue';
 const todoRef = ref('');
 const todoListRef = ref([]);
@@ -11,6 +12,39 @@ const addTodo = () => {
 
 const ls = localStorage.todoList;
 todoListRef.value = ls ? JSON.parse(ls) : [];
+
+/*編を選択されたタスクをインプット画面に表示する*/
+const isEditRef = ref(false);
+let editId = -1;
+const showTodo = (id) => {
+  const todo = todoListRef.value.find((todo) => todo.id === id);
+  todoRef.value = todo.task;
+  isEditRef.value = true;
+  editId = id;
+};
+
+/*Todoリストを書き換える*/
+const editTodo = () => {
+  const todo = todoListRef.value.find((todo) => todo.id === editId);
+  const idx = todoListRef.value.findIndex((todo) => todo.id === editId);
+  todo.task = todoRef.value;
+  /*対象オブジェクトを置き換える*/
+  todoListRef.value.splice(idx, 1, todo);
+  localStorage.todoList = JSON.stringify(todoListRef.value);
+  isEditRef.value = false;
+  editIndex = -1;
+  todoRef.value = '';
+};
+
+/*Todoリストから選択した値を削除する*/
+const deleteTodo = (id) => {
+  const todo = todoListRef.value.find((todo) => todo.id === id);
+  const idx = todoListRef.value.findIndex((todo) => todo.id === id);
+  const delMsg = '[' + todo.task + ']を削除しますか？';
+  if (!confirm(delMsg)) return;
+  todoListRef.value.splice(idx, 1);
+  localStorage.todoList = JSON.stringify(todoListRef.value);
+};
 </script>
 
 <template>
@@ -21,7 +55,8 @@ todoListRef.value = ls ? JSON.parse(ls) : [];
       placeholder="＋　TODOを入力"
       v-model="todoRef"
     />
-    <button class="btn" @click="addTodo">追加</button>
+    <button class="btn" @click="addTodo" v-if="!isEditRef">追加</button>
+    <button class="btn green" @click="editTodo" v-if="isEditRef">変更</button>
   </div>
   <div class="box_list">
     <div class="todo_list" v-for="todo in todoListRef" :key="todo.id">
@@ -30,8 +65,8 @@ todoListRef.value = ls ? JSON.parse(ls) : [];
         <label>{{ todo.task }}</label>
       </div>
       <div class="btns">
-        <button class="btn green">編</button>
-        <button class="btn pink">削</button>
+        <button class="btn green" @click="showTodo(todo.id)">編</button>
+        <button class="btn pink" @click="deleteTodo(todo.id)">削</button>
       </div>
     </div>
   </div>
