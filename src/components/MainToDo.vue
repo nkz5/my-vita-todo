@@ -1,49 +1,38 @@
 <script setup>
-/*インプットされたタスクをhtmlのlocalstorageに保存する*/
 import { ref } from 'vue';
+import { useTodoList } from '/src/composables/useTodoList.js';
+// 入力を取得
 const todoRef = ref('');
-const todoListRef = ref([]);
+
+const isEditRef = ref(false);
+const { todoListRef, add, show, edit, del, check } = useTodoList();
+
+/*インプットされたタスクをhtmlのlocalstorageに保存する*/
 const addTodo = () => {
-  const id = new Date().getTime();
-  todoListRef.value.push({ id: id, task: todoRef.value });
-  localStorage.todoList = JSON.stringify(todoListRef.value);
+  add(todoRef.value);
   todoRef.value = '';
 };
 
-const ls = localStorage.todoList;
-todoListRef.value = ls ? JSON.parse(ls) : [];
-
 /*編を選択されたタスクをインプット画面に表示する*/
-const isEditRef = ref(false);
-let editId = -1;
 const showTodo = (id) => {
-  const todo = todoListRef.value.find((todo) => todo.id === id);
-  todoRef.value = todo.task;
+  todoRef.value = show(id);
   isEditRef.value = true;
-  editId = id;
 };
 
 /*Todoリストを書き換える*/
 const editTodo = () => {
-  const todo = todoListRef.value.find((todo) => todo.id === editId);
-  const idx = todoListRef.value.findIndex((todo) => todo.id === editId);
-  todo.task = todoRef.value;
-  /*対象オブジェクトを置き換える*/
-  todoListRef.value.splice(idx, 1, todo);
-  localStorage.todoList = JSON.stringify(todoListRef.value);
+  edit(todoRef.value);
   isEditRef.value = false;
-  editIndex = -1;
   todoRef.value = '';
 };
 
 /*Todoリストから選択した値を削除する*/
 const deleteTodo = (id) => {
-  const todo = todoListRef.value.find((todo) => todo.id === id);
-  const idx = todoListRef.value.findIndex((todo) => todo.id === id);
-  const delMsg = '[' + todo.task + ']を削除しますか？';
-  if (!confirm(delMsg)) return;
-  todoListRef.value.splice(idx, 1);
-  localStorage.todoList = JSON.stringify(todoListRef.value);
+  del(id);
+};
+
+const changeCheck = (id) => {
+  check(id);
 };
 </script>
 
