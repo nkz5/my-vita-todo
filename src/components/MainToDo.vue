@@ -1,10 +1,24 @@
 <script setup>
-import { ref } from 'vue';
+import { onUpdated, onMounted, ref } from 'vue';
 import { useTodoList } from '/src/composables/useTodoList.js';
 import BaseButton from '/src/components/BaseButton.vue';
 import ButtonAdd from '/src/components/ButtonAdd.vue';
+
 // 入力を取得
-const todoRef = ref('');
+const todoRef = ref('abc');
+
+//setupでtodo入力欄を取得
+const inpSetup = document.getElementById('inp');
+console.log(inpSetup);
+
+onMounted(() => {
+  const inpMmount = document.getElementById('inp').value;
+  console.log(inpMmount);
+});
+
+onUpdated(() => {
+  console.log('onUpdated: ', todoRef.value);
+});
 
 const isEditRef = ref(false);
 const { todoListRef, add, show, edit, del, check, countFin } = useTodoList();
@@ -47,11 +61,13 @@ const countFinMethod = () => {
 const test = (str) => {
   console.log('test', str);
 };
+console.log('setup');
 </script>
 
 <template>
   <div class="box_input">
     <input
+      id="inp"
       type="text"
       class="todo_input"
       placeholder="＋　TODOを入力"

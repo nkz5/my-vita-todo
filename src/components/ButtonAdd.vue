@@ -1,6 +1,11 @@
 <script setup>
+import { onUnmounted } from 'vue';
 import BaseButton from '/src/components/BaseButton.vue';
 const emit = defineEmits(['add-click']);
+
+onUnmounted(() => {
+  console.log('onUnmounted');
+});
 </script>
 
 <template>
