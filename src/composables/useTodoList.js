@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 export const useTodoList = (id) => {
   const ls = localStorage.todoList;
@@ -60,5 +60,14 @@ export const useTodoList = (id) => {
     localStorage.todoList = JSON.stringify(todoListRef.value);
   };
 
-  return { todoListRef, add, show, edit, del, check };
+  // TODOリストからcheckedがtrueの要素数を返す
+  const countFin = computed(() => {
+    console.log('computed');
+    /* todoListRefがリアクティブ。
+    リアクティブな変数が変更されない限りキャッシュ（再評価）されない。*/
+    const finArr = todoListRef.value.filter((todo) => todo.checked);
+    return finArr.length;
+  });
+
+  return { todoListRef, add, show, edit, del, check, countFin };
 };

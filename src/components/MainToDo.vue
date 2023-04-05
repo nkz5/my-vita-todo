@@ -1,11 +1,13 @@
 <script setup>
 import { ref } from 'vue';
 import { useTodoList } from '/src/composables/useTodoList.js';
+import BaseButton from '/src/components/BaseButton.vue';
+import ButtonAdd from '/src/components/ButtonAdd.vue';
 // 入力を取得
 const todoRef = ref('');
 
 const isEditRef = ref(false);
-const { todoListRef, add, show, edit, del, check } = useTodoList();
+const { todoListRef, add, show, edit, del, check, countFin } = useTodoList();
 
 /*インプットされたタスクをhtmlのlocalstorageに保存する*/
 const addTodo = () => {
@@ -34,6 +36,17 @@ const deleteTodo = (id) => {
 const changeCheck = (id) => {
   check(id);
 };
+
+// useTodoList.js の算出プロパティーを関数で書いただけ
+const countFinMethod = () => {
+  console.log('method');
+  const finArr = todoListRef.value.filter((todo) => todo.checked);
+  return finArr.length;
+};
+
+const test = (str) => {
+  console.log('test', str);
+};
 </script>
 
 <template>
@@ -44,8 +57,11 @@ const changeCheck = (id) => {
       placeholder="＋　TODOを入力"
       v-model="todoRef"
     />
-    <button class="btn" @click="addTodo" v-if="!isEditRef">追加</button>
-    <button class="btn green" @click="editTodo" v-if="isEditRef">変更</button>
+    <BaseButton color="green" @on-click="editTodo" v-if="isEditRef">
+      変更
+    </BaseButton>
+    <ButtonAdd @add-click="addTodo" v-else />
+    <!--<BaseButton color="blue" @on-click="addTodo" v-else>追加</BaseButton>-->
   </div>
   <div class="box_list">
     <div class="todo_list" v-for="todo in todoListRef" :key="todo.id">
@@ -59,10 +75,14 @@ const changeCheck = (id) => {
         <label>{{ todo.task }}</label>
       </div>
       <div class="btns">
-        <button class="btn green" @click="showTodo(todo.id)">編</button>
-        <button class="btn pink" @click="deleteTodo(todo.id)">削</button>
+        <BaseButton color="green" @on-click="showTodo(todo.id)">編</BaseButton>
+        <BaseButton color="pink" @on-click="deleteTodo(todo.id)">削</BaseButton>
       </div>
     </div>
+  </div>
+  <div class="fincount">
+    <span> 完了：{{ countFin }}、</span>
+    <span> 未完了：{{ todoListRef.length - countFin }}</span>
   </div>
 </template>
 
@@ -122,5 +142,9 @@ const changeCheck = (id) => {
   text-decoration: line-through;
   background-color: #ddd;
   color: #777;
+}
+.fincount {
+  margin-top: 8px;
+  font-size: 0.8em;
 }
 </style>
