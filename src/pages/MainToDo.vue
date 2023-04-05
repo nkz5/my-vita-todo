@@ -5,7 +5,7 @@ import BaseButton from '/src/components/BaseButton.vue';
 import ButtonAdd from '/src/components/ButtonAdd.vue';
 
 // 入力を取得
-const todoRef = ref('abc');
+const todoRef = ref('');
 
 //setupでtodo入力欄を取得
 const inpSetup = document.getElementById('inp');
