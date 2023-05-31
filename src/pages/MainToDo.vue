@@ -4,6 +4,8 @@ import { useTodoList } from '/src/composables/useTodoList.js';
 import BaseButton from '/src/components/BaseButton.vue';
 import ButtonAdd from '/src/components/ButtonAdd.vue';
 
+import Gapi from 'vue-googleapis';
+
 // 入力を取得
 const todoRef = ref('');
 
@@ -12,6 +14,7 @@ const inpSetup = document.getElementById('inp');
 console.log(inpSetup);
 
 onMounted(() => {
+  //getSearch();
   const inpMmount = document.getElementById('inp').value;
   console.log(inpMmount);
 });
@@ -62,9 +65,29 @@ const test = (str) => {
   console.log('test', str);
 };
 console.log('setup');
+/*
+methods = {
+  getSearch () {
+    this.$google.api.auth2.getAuthInstance();
+    
+    this.$google.api.load('customsearch', 'v1', () => {
+      this.$google.api.customsearch.cse.list({
+        q: 'ハウコレ',
+        cx: '309f54ba859d04f9b',
+      }).then((response) => {
+        console.log(response.result);
+      });
+    });
+  }
+}*/
+
+//Birth Date yyyy-mm-dd
+const birthDate = ref('2001-01-01');
 </script>
 
 <template>
+
+
   <div class="box_input">
     <input
       id="inp"
@@ -99,6 +122,9 @@ console.log('setup');
   <div class="fincount">
     <span> 完了：{{ countFin }}、</span>
     <span> 未完了：{{ todoListRef.length - countFin }}</span>
+  </div>
+  <div>
+    <input type="date" v-model="birthDate" :max="new Date().toISOString().split('T')[0]" />
   </div>
 </template>
 
