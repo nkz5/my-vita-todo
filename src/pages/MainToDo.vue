@@ -4,7 +4,6 @@ import { useTodoList } from '/src/composables/useTodoList.js';
 import BaseButton from '/src/components/BaseButton.vue';
 import ButtonAdd from '/src/components/ButtonAdd.vue';
 
-import Gapi from 'vue-googleapis';
 
 // 入力を取得
 const todoRef = ref('');
@@ -65,21 +64,6 @@ const test = (str) => {
   console.log('test', str);
 };
 console.log('setup');
-/*
-methods = {
-  getSearch () {
-    this.$google.api.auth2.getAuthInstance();
-    
-    this.$google.api.load('customsearch', 'v1', () => {
-      this.$google.api.customsearch.cse.list({
-        q: 'ハウコレ',
-        cx: '309f54ba859d04f9b',
-      }).then((response) => {
-        console.log(response.result);
-      });
-    });
-  }
-}*/
 
 //Birth Date yyyy-mm-dd
 const birthDate = ref('2001-01-01');
