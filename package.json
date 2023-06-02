@@ -9,9 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "googleapis": "^118.0.0",
     "vue": "^3.2.47",
-    "vue-googleapis": "^1.0.10",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

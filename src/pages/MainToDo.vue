@@ -13,7 +13,6 @@ const inpSetup = document.getElementById('inp');
 console.log(inpSetup);
 
 onMounted(() => {
-  //getSearch();
   const inpMmount = document.getElementById('inp').value;
   console.log(inpMmount);
 });
@@ -70,8 +69,6 @@ const birthDate = ref('2001-01-01');
 </script>
 
 <template>
-
-
   <div class="box_input">
     <input
       id="inp"
@@ -106,9 +103,6 @@ const birthDate = ref('2001-01-01');
   <div class="fincount">
     <span> 完了：{{ countFin }}、</span>
     <span> 未完了：{{ todoListRef.length - countFin }}</span>
-  </div>
-  <div>
-    <input type="date" v-model="birthDate" :max="new Date().toISOString().split('T')[0]" />
   </div>
 </template>
 
